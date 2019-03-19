@@ -1,6 +1,6 @@
 # learn-fabric
 
-### first-network-kafka
+## first-network-kafka
 
 Hyperledger Fabric v 1.4中first-network的kafka模式多机部署（将zookeeper、kafka和orderer全部放到同一台机器），各机器及其对应service列表如下图所示：
 
@@ -14,7 +14,7 @@ Hyperledger Fabric v 1.4中first-network的kafka模式多机部署（将zookeepe
 
 > 注：此部分为first-network多机部署kafka模式的过渡产品，将zookeeper、kafka和orderer全部放到同一台机器，目的只是为了简化部署、方便学习，实际环境中不建议采用此种方式。
 
-### first-network-kafka-multihost
+## first-network-kafka-multihost
 
 Hyperledger Fabric v 1.4中first-network的kafka模式多机部署更新版，各机器及其对应service列表如下图所示：
 
