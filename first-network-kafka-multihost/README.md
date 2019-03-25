@@ -131,6 +131,8 @@
 
    - 与`zookeeper.yaml`配置类似，`kafka.yaml`使用`extends`来继承`base/kafka-base.yaml`中的kafka服务。
 
+   - 必须设置`KAFKA_ADVERTISED_HOST_NAME`环境变量，若在`extra_hosts`中进行了当前kafka节点的IP映射，则其值为当前kafka节点的主机名，如`kafka0`；否则，其值为当前kafka节点的IP，如`192.168.70.20`。若不设置该环境变量，则orderer节点无法正确连接kafka节点，随之产生一系列问题。
+   
    - `KAFKA_BROKER_ID`是kafka节点在集群中的唯一标识，不可重复。此处4个kafka节点的`KAFKA_BROKER_ID`依次为1、2、3、4。
 
    - 以`kafka0.yaml`为例，其内容如下所示：
