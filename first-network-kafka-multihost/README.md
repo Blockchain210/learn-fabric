@@ -292,11 +292,11 @@
          - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
          - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
          - CORE_PEER_LOCALMSPID=Org1MSP
-     	 volumes:
+       volumes:
          - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
          - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
          - peer0.org1.example.com:/var/hyperledger/production
-     	 extra_hosts:
+       extra_hosts:
          - "peer1.org1.example.com:192.168.70.22"
          - "peer0.org2.example.com:192.168.70.43"
          - "peer1.org2.example.com:192.168.70.44"	
