@@ -48,14 +48,14 @@
    OrdererType: kafka
    Addresses:
    	- orderer0.example.com:7050
-   	- orderer1.example.com:7050
-   	- orderer2.example.com:7050
+       - orderer1.example.com:7050
+       - orderer2.example.com:7050
    Kafka:
    	Brokers:
-   		- kafka0:9092
-   		- kafka1:9092
-   		- kafka2:9092
-   		- kafka3:9092
+       	- kafka0:9092
+           - kafka1:9092
+           - kafka2:9092
+           - kafka3:9092
    ```
 
 ## Docker-compose配置文件
