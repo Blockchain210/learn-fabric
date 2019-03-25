@@ -106,21 +106,21 @@
    - 以`zookeeper0.yaml`为例，其内容如下所示：
 
      ```yaml
-     zookeeper0:	
-     	extends:
-     		file: base/kafka-base.yaml
-     		service: zookeeper
-     	container_name: zookeeper0
-     	environment:
-     		ZOO_MY_ID: 1
-     		ZOO_SERVERS:
-     			- server.1=zookeeper0:2888:3888
-     			- server.2=zookeeper1:2888:3888
-     			- server.3=zookeeper2:2888:3888
-     	extra_hosts:
-     		- "zookeeper0:0.0.0.0"
-     		- "zookeeper1:192.168.70.44"
-     		- "zookeeper2:192.168.70.22"
+     zookeeper0:
+       extends:
+         file: base/kafka-base.yaml
+         service: zookeeper
+       container_name: zookeeper0
+       environment:
+         ZOO_MY_ID: 1
+         ZOO_SERVERS:
+            - server.1=zookeeper0:2888:3888
+            - server.2=zookeeper1:2888:3888
+            - server.3=zookeeper2:2888:3888
+       extra_hosts:
+         - "zookeeper0:0.0.0.0"
+         - "zookeeper1:192.168.70.44"
+         - "zookeeper2:192.168.70.22"
      ```
 
    - 要获得其他`zookeeper.yaml`，只需将`zookeeper0.yaml`中的`service`、`container_name`、`ZOO_MY_ID`、`extra_hosts`按照实际网络进行修改即可。
@@ -137,22 +137,22 @@
 
      ```yaml
      kafka0:
-     	extends:
-     		file: base/kafka-base.yaml
-     		service: kafka
-     	container_name: kafka0
-     	environment:
-     		KAFKA_BROKER_ID: 1
-     		KAFKA_ADVERTISED_HOST_NAME: kafka0
-     		kAFKA_ZOOKEEPER_CONNECT: zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
-     	extra_hosts:
-     		- "zookeeper0:192.168.70.20"
-             - "zookeeper1:192.168.70.44"
-             - "zookeeper2:192.168.70.22"
-             - "kafka0:192.168.70.20"
-             - "kafka1:192.168.70.44"
-             - "kafka2:192.168.70.22"
-             - "kafka3:192.168.70.43"
+       extends:
+         file: base/kafka-base.yaml
+         service: kafka
+       container_name: kafka0
+       environment:
+         KAFKA_BROKER_ID: 1
+         KAFKA_ADVERTISED_HOST_NAME: kafka0
+         kAFKA_ZOOKEEPER_CONNECT: zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+       extra_hosts:
+         - "zookeeper0:192.168.70.20"
+         - "zookeeper1:192.168.70.44"
+         - "zookeeper2:192.168.70.22"
+         - "kafka0:192.168.70.20"
+         - "kafka1:192.168.70.44"
+         - "kafka2:192.168.70.22"
+         - "kafka3:192.168.70.43"
      ```
 
    - 要获得其他`kafka.yaml`，只需将`kafka0.yaml`中的`service`、`container_name`、`KAFKA_BROKER_ID`、`KAFKA_ADVERTISED_HOST_NAME` 、`KAFKA_ZOOKEEPER_CONNECT`、`extra_hosts`按照实际网络进行修改即可。
@@ -171,29 +171,29 @@
 
      ```yaml
      orderer-base:
-     	image: hyperledger/fabric-orderer
-         restart: always
-         environment:
-         	- FABRIC_LOGGING_SPEC=DEBUG
-             - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-             - ORDERER_GENERAL_GENESISMETHOD=file
-             - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
-             - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-             - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-         	# enabled TLS
-         	- ORDERER_GENERAL_TLS_ENABLED=true
-         	- ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-         	- ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-         	- ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-         	# consensus: kafka、solo
-         	- CONFIGTX_ORDERER_ORDERERTYPE=kafka 
-         	- ORDERER_KAFKA_VERBOSE=true
-         working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-         command: orderer
-         volumes:
-         	- ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-         ports:
-         	- 7050:7050
+       image: hyperledger/fabric-orderer
+       restart: always
+       environment:
+         - FABRIC_LOGGING_SPEC=DEBUG
+         - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+         - ORDERER_GENERAL_GENESISMETHOD=file
+         - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+         - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+         - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+         # enabled TLS
+         - ORDERER_GENERAL_TLS_ENABLED=true
+         - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+         - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+         - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+         # consensus: kafka、solo
+         - CONFIGTX_ORDERER_ORDERERTYPE=kafka
+         - ORDERER_KAFKA_VERBOSE=true
+       working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+       command: orderer
+       volumes:
+         - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+       ports:
+         - 7050:7050
      ```
 
 2. 配置`orderer.yaml`
@@ -212,22 +212,22 @@
 
      ```yaml
      orderer0.example.com:
-     	extends:
-         	file: base/orderer-base.yaml
-             service: orderer-base
-         container_name: orderer0.example.com
-         environment:
-         	- ORDERER_HOST=orderer0.example.com
-             - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
-         volumes:
-         	- ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
-             - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
-             - orderer0.example.com:/var/hyperledger/production/orderer
-         extra_hosts:
-         	- "kafka0:192.168.70.20"
-             - "kafka1:192.168.70.44"
-             - "kafka2:192.168.70.22"
-             - "kafka3:192.168.70.43"
+       extends:
+         file: base/orderer-base.yaml
+         service: orderer-base
+       container_name: orderer0.example.com
+       environment:
+         - ORDERER_HOST=orderer0.example.com
+         - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+       volumes:
+         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
+         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
+         - orderer0.example.com:/var/hyperledger/production/orderer
+       extra_hosts:
+         - "kafka0:192.168.70.20"
+         - "kafka1:192.168.70.44"
+         - "kafka2:192.168.70.22"
+         - "kafka3:192.168.70.43"
      ```
 
 ### `peer`节点配置
@@ -246,32 +246,32 @@
 
      ```yaml
      peer-base:
-     	image: hyperledger/fabric-peer
-         restart: always
-         environment:
-         	- CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-             - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_byfn
-             - FABRIC_LOGGING_SPEC=DEBUG
-             - CORE_PEER_GOSSIP_USELEADERELECTION=true
-             - CORE_PEER_GOSSIP_ORGLEADER=false
-             - CORE_PEER_PROFILE_ENABLED=true
-             - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
-             # Configuring TLS for peers nodes
-             - CORE_PEER_TLS_ENABLED=true
-             - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-             - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-             - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-     	working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-         command: peer node start
-         extra_hosts:
-         	- "orderer0.example.com:192.168.70.20"
-             - "orderer1.example.com:192.168.70.21"
-             - "orderer2.example.com:192.168.70.22"
-     	volumes:
-         	- /var/run/:/host/var/run/
-     	ports:
-         	- 7051:7051
-             - 7053:7053
+       image: hyperledger/fabric-peer
+       restart: always
+       environment:
+         - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+         - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_byfn
+         - FABRIC_LOGGING_SPEC=DEBUG
+         - CORE_PEER_GOSSIP_USELEADERELECTION=true
+         - CORE_PEER_GOSSIP_ORGLEADER=false
+         - CORE_PEER_PROFILE_ENABLED=true
+         - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+         # Configuring TLS for peers nodes
+         - CORE_PEER_TLS_ENABLED=true
+         - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+         - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+         - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+       working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+       command: peer node start
+       extra_hosts:
+         - "orderer0.example.com:192.168.70.20"
+         - "orderer1.example.com:192.168.70.21"
+         - "orderer2.example.com:192.168.70.22"
+       volumes:
+         - /var/run/:/host/var/run/
+       ports:
+         - 7051:7051
+         - 7053:7053
      ```
 
 2. 配置`peer.yaml`
@@ -282,24 +282,24 @@
 
      ```yaml
      peer0.org1.example.com:
-     	extends:
+     	 extends:
      		file: base/peer-base.yaml
      		service: peer-base
-     	container_name: peer0.org1.example.com
-     	environment:
-     		- CORE_PEER_ID=peer0.org1.example.com
-             - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-             - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
-             - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
-             - CORE_PEER_LOCALMSPID=Org1MSP
-     	volumes:
-     		- ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-             - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
-             - peer0.org1.example.com:/var/hyperledger/production
-     	extra_hosts:
-     		- "peer1.org1.example.com:192.168.70.22"
-             - "peer0.org2.example.com:192.168.70.43"
-             - "peer1.org2.example.com:192.168.70.44"	
+     	 container_name: peer0.org1.example.com
+     	 environment:
+         - CORE_PEER_ID=peer0.org1.example.com
+         - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+         - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
+         - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+         - CORE_PEER_LOCALMSPID=Org1MSP
+     	 volumes:
+         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
+         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+         - peer0.org1.example.com:/var/hyperledger/production
+     	 extra_hosts:
+         - "peer1.org1.example.com:192.168.70.22"
+         - "peer0.org2.example.com:192.168.70.43"
+         - "peer1.org2.example.com:192.168.70.44"	
      ```
 
 ## 启动多节点集群
