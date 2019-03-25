@@ -276,9 +276,13 @@
 
 2. 配置`peer.yaml`
 
-   - 
+   - 根据peer节点的数量，创建相应数量的`peer.yaml`。此处我有4个peer节点，对应创建了`peer0.yaml`、`peer1.yaml`、`peer2.yaml`和`peer3.yaml`。
 
-   - 以`peer1.yaml`为例，其中的peer0.org1.example.com服务内容如下所示：
+   - 同样，`peer.yaml`使用`extends`来继承`base/peer-base.yaml`中的peer-base服务。
+
+   - 在`volumes`下添加特定peer的volume、msp和tls数据目录映射。
+
+   - 以`peer0.yaml`为例，其中的peer0.org1.example.com服务内容如下所示：
 
      ```yaml
      peer0.org1.example.com:
