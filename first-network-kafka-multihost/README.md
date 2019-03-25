@@ -52,7 +52,7 @@
        - orderer2.example.com:7050
    Kafka:
       Brokers:
-       	- kafka0:9092
+         - kafka0:9092
          - kafka1:9092
          - kafka2:9092
          - kafka3:9092
@@ -68,12 +68,12 @@
 
      ```yaml
      zookeeper:
-     	image: hyperledger/fabric-zookeeper
-     	restart: always
-     	ports:
-     		- 2181:2181
-     		- 2888:2888
-     		- 3888:3888
+       image: hyperledger/fabric-zookeeper
+       restart: always
+       ports:
+         - 2181:2181
+         - 2888:2888
+         - 3888:3888
      ```
 
    - kafka服务
