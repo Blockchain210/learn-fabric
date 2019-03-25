@@ -80,17 +80,17 @@
 
      ```yaml
      kafka:
-     	image: hyperledger/fabric-kafka
-     	restart: always
-     	environment:
-     		- KAFKA_LOG_RETENTION_MS=-1
-             - KAFKA_MESSAGE_MAX_BYTES=103809024
-             - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
-             - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
-             - KAFKA_DEFAULT_REPLICATION_FACTOR=3
-             - KAFKA_MIN_INSYNC_REPLICAS=2
-         ports:
-             - 9092:9092
+       image: hyperledger/fabric-kafka
+       restart: always
+       environment:
+         - KAFKA_LOG_RETENTION_MS=-1
+         - KAFKA_MESSAGE_MAX_BYTES=103809024
+         - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+         - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+         - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+         - KAFKA_MIN_INSYNC_REPLICAS=2
+       ports:
+         - 9092:9092
      ```
 
 2. 配置`zookeeper.yaml`
