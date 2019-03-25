@@ -282,11 +282,11 @@
 
      ```yaml
      peer0.org1.example.com:
-     	 extends:
-     		file: base/peer-base.yaml
-     		service: peer-base
-     	 container_name: peer0.org1.example.com
-     	 environment:
+       extends:
+         file: base/peer-base.yaml
+         service: peer-base
+       container_name: peer0.org1.example.com
+       environment:
          - CORE_PEER_ID=peer0.org1.example.com
          - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
          - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
