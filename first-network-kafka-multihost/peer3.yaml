@@ -57,6 +57,9 @@ services:
             - "orderer0.example.com:192.168.70.20"
             - "orderer1.example.com:192.168.70.21"
             - "orderer2.example.com:192.168.70.22"
+            - "peer0.org1.example.com:192.168.70.21"
+            - "peer1.org1.example.com:192.168.70.22"
+            - "peer0.org2.example.com:192.168.70.43"
         depends_on:
             - peer1.org2.example.com
         networks:

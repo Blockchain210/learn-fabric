@@ -12,7 +12,6 @@ services:
             file: base/orderer-base.yaml
             service: orderer-base
         container_name: orderer0.example.com
-        dns_search: .
         environment:
             - ORDERER_HOST=orderer0.example.com
             - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
