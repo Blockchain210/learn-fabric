@@ -18,22 +18,14 @@ services:
             - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051
             - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
             - CORE_PEER_LOCALMSPID=Org2MSP
-            - CORE_PEER_TLS_CLIENTAUTHREQUIRED =true
-            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=[/etc/hyperledger/fabric/users/Admin@org2.example.com/tls/ca.crt]
-            - CORE_PEER_TLS_CLIENTCERT_FILE=/etc/hyperledger/fabric/users/Admin@org2.example.com/tls/client.crt
-            - CORE_PEER_TLS_CLIENTKEY_FILE=/etc/hyperledger/fabric/users/Admin@org2.example.com/tls/client.key
         volumes:
             - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
             - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
-            - ./crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/fabric/users
             - peer1.org2.example.com:/var/hyperledger/production
         extra_hosts:
             - "peer0.org1.example.com:192.168.70.21"
             - "peer1.org1.example.com:192.168.70.22"
             - "peer0.org2.example.com:192.168.70.43"
-        ports:
-            - 7051:7051
-            - 7053:7053
         networks:
             - byfn
             
@@ -53,9 +45,6 @@ services:
             - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
             - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/server.crt
             - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/server.key
-            - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
-            - CORE_PEER_TLS_CLIENTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/tls/client.crt
-            - CORE_PEER_TLS_CLIENTKEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/tls/client.key            
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: /bin/bash
         volumes:
@@ -66,8 +55,11 @@ services:
             - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
         extra_hosts:
             - "orderer0.example.com:192.168.70.20"
-            - "orderer1.example.com:192.168.70.20"
-            - "orderer2.example.com:192.168.70.20"
+            - "orderer1.example.com:192.168.70.21"
+            - "orderer2.example.com:192.168.70.22"
+            - "peer0.org1.example.com:192.168.70.21"
+            - "peer1.org1.example.com:192.168.70.22"
+            - "peer0.org2.example.com:192.168.70.43"
         depends_on:
             - peer1.org2.example.com
         networks:
