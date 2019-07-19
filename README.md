@@ -61,7 +61,7 @@
      ```yaml
      OrdererGenesis:
      	<<: *ChannelDefaults
-     	Orderer:
+         Orderer:
          	<<: *OrdererDefaults
              Organizations:
              	- *OrdererOrg
@@ -69,12 +69,12 @@
              	<<: *OrdererCapabilities
          Consortiums:
          	SampleConsortium:
-             	Organizations:
-                 	- *OrdererOrg
+         		Organizations:
+         			- *OrdererOrg
              TestConsortium:
              	Organizations:
-                 	- *Org1
-                     - *Org2
+             		- *Org1
+             		- *Org2
      ```
 
    - 向`configtx.yaml`的`Section: Profile`中添加新建通道的配置profile
