@@ -60,35 +60,35 @@
 
      ```yaml
      OrdererGenesis:
-     	<<: *ChannelDefaults
+         <<: *ChannelDefaults
          Orderer:
          	<<: *OrdererDefaults
              Organizations:
-             	- *OrdererOrg
+               - *OrdererOrg
              Capabilities:
-             	<<: *OrdererCapabilities
+               <<: *OrdererCapabilities
          Consortiums:
          	SampleConsortium:
-         		Organizations:
-         			- *OrdererOrg
+               Organizations:
+                  - *OrdererOrg
              TestConsortium:
-             	Organizations:
-             		- *Org1
-             		- *Org2
+               Organizations:
+                  - *Org1
+                  - *Org2
      ```
 
    - 向`configtx.yaml`的`Section: Profile`中添加新建通道的配置profile
 
      ```yaml
      TwoOrgsChannel:
-     	Consortium: TestConsortium
+         Consortium: TestConsortium
          Application:
          	<<: *ApplicationDefaults
              Organizations:
-             	- *Org1
-             	- *Org2
+               - *Org1
+               - *Org2
              Capabilities:
-             	<<: *ApplicationCapabilities
+               <<: *ApplicationCapabilities
      ```
 
    - 创建通道配置Transaction
