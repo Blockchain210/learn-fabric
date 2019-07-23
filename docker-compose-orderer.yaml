@@ -13,12 +13,14 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.example.com
     container_name: orderer.example.com
+    restart: always
     networks:
       - byfn
 
   ordererCli:
     container_name: ordererCli
     image: hyperledger/fabric-tools:$IMAGE_TAG
+    restart: always
     tty: true
     stdin_open: true
     environment:
