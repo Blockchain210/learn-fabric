@@ -37,7 +37,7 @@
    - 创建联盟
 
      ```bash
-     fabric-consortia-mgr newconsortia TestConsortium byfn-sys-channel -ojf Org1/channel-artifacts/Org1.json -ojf Org2/channel-artifacts/Org2.json -vvv
+     fabric-consortia-mgr newconsortia TestConsortium byfn-sys-channel --cliName ordererCli -ojf Org1/channel-artifacts/Org1.json -ojf Org2/channel-artifacts/Org2.json -vvv
      ```
 
 5. 在特定机器启动特定Org的docker-compose-peer*.yaml（以启动Org1的docker-compose-peer0.yaml为例）
