@@ -31,7 +31,7 @@
 
      ```bash
      fabric-org-mgr neworg Org1 org1.example.com -vvv
-     fabric-org-mgr gcompose Or1 org1.example.com net byfn -vvv
+     fabric-org-mgr gcompose Org1 org1.example.com net byfn -vvv
      ```
 
    - 创建联盟
