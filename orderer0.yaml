@@ -1,0 +1,54 @@
+version: '2'
+
+volumes:
+    orderer0.example.com:
+
+networks:
+    byfn:
+    
+services:    
+    orderer0.example.com:
+        extends:
+            file: base/orderer-base.yaml
+            service: orderer-base
+        container_name: orderer0.example.com
+        environment:
+            - ORDERER_HOST=orderer0.example.com
+            - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+        volumes:
+            - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
+            - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
+            - orderer0.example.com:/var/hyperledger/production/orderer
+        extra_hosts:
+            - "kafka0:192.168.70.20"
+            - "kafka1:192.168.70.21"
+            - "kafka2:192.168.70.22"
+            - "kafka3:192.168.70.44"
+        networks:
+            - byfn
+    
+    orderer0Cli:
+        container_name: orderer0Cli
+        image: hyperledger/fabric-tools
+        restart: always
+        tty: true
+        stdin_open: true
+        environment:
+         - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+         - FABRIC_LOGGING_SPEC=INFO
+         - CORE_PEER_ID=ordererCli
+         - CORE_PEER_ADDRESS=orderer0.example.com:7050
+         - CORE_PEER_LOCALMSPID=OrdererMSP
+         - CORE_PEER_TLS_ENABLED=true
+         - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+         - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.key
+         - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/ca.crt
+         - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/users/Admin@example.com/msp
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+        command: /bin/bash
+        volumes:
+         - /var/run/:/host/var/run/
+         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        networks:
+         - byfn
