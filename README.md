@@ -64,7 +64,7 @@
        # 配置增量计算
        configtxlator proto_encode --input ./channel-artifacts/byfn-sys-channel.json --type common.Config --output ./channel-artifacts/byfn-sys-channel.pb
        configtxlator proto_encode --input ./channel-artifacts/byfn-sys-channel_updated.json --type common.Config --output ./channel-artifacts/byfn-sys-channel_updated.pb
-       configtxlator compute_update --channel_id byfn-sys-channel --original ./channel-artifacts/byfn-sys-channel.pb --updated byfn-sys-channel_updated.pb --output ./channel-artifacts/byfn-sys-channel_configUpdate.pb
+       configtxlator compute_update --channel_id byfn-sys-channel --original ./channel-artifacts/byfn-sys-channel.pb --updated ./channel-artifacts/byfn-sys-channel_updated.pb --output ./channel-artifacts/byfn-sys-channel_configUpdate.pb
        # 生成Config Update并将其封装进一个envelope
        configtxlator proto_decode --input ./channel-artifacts/byfn-sys-channel_configUpdate.pb --type common.ConfigUpdate | jq . > ./channel-artifacts/byfn-sys-channel_configUpdate.json
        echo '{"payload":{"header":{"channel_header":{"channel_id":"byfn-sys-channel", "type":2}},"data":{"config_update":'$(cat ./channel-artifacts/byfn-sys-channel_configUpdate.json)'}}}' | jq . > ./channel-artifacts/byfn-sys-channel_configUpdate_in_envelope.json
@@ -144,15 +144,15 @@
    ```bash
    # 进入cli容器
    docker exec -it Org1cli bash
-   
+
    # 设置环境变量以方便后面的使用
    export CHANNEL_NAME=mychannel
    export ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
-   
+
    # 创建Channel
    # 生成的mychannel.block是peer节点加入Channel的许可
    peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/mychannel.tx --tls --cafile $ORDERER_CA
-   
+
    # 将peer0.org1.example.com加入到mychannel通道中
    peer channel join -b mychannel.block
    ```
