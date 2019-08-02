@@ -5,8 +5,8 @@ volumes:
 
 networks:
     byfn:
-    
-services:    
+
+services:
     orderer1.example.com:
         extends:
             file: base/orderer-base.yaml
@@ -26,7 +26,7 @@ services:
             - "kafka3:192.168.70.44"
         networks:
             - byfn
-            
+
     orderer1Cli:
         container_name: orderer1Cli
         image: hyperledger/fabric-tools
@@ -50,5 +50,9 @@ services:
          - /var/run/:/host/var/run/
          - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
          - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        extra_hosts:
+          - "orderer0.example.com:192.168.70.20"
+          - "orderer1.example.com:192.168.70.21"
+          - "orderer2.example.com:192.168.70.22"
         networks:
-         - byfn        
+         - byfn
