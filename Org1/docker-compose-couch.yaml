@@ -12,6 +12,7 @@ services:
   couchdb0:
     container_name: couchdb0
     image: hyperledger/fabric-couchdb
+    restart: always
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -35,4 +36,3 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     depends_on:
       - couchdb0
-
