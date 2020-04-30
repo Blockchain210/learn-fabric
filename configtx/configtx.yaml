@@ -306,6 +306,7 @@ Profiles:       # 按实际情况进行更改(非常重要)
     SampleMultiNodeEtcdRaft:
         <<: *ChannelDefaults
         Capabilities:
+            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             OrdererType: etcdraft
