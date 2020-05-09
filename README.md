@@ -263,8 +263,10 @@
    - 生成创世区块并将其分发给其他机器：
 
      ```bash
+     # 确保已设置环境变量FABRIC_CFG_PATH
+     export FABRIC_CFG_PATH=${PWD}/configtx
      # 生成创世区块
-     FABRIC_CFG_PATH=${PWD}/configtx configtxgen -profile SampleMultiNodeEtcdRaft -channelID system-channel -outputBlock OrdererOrg/genesis.block
+     configtxgen -profile SampleMultiNodeEtcdRaft -channelID system-channel -outputBlock OrdererOrg/genesis.block
      
      # 分发给其他机器(192.168.70.20、192.168.70.21)
      cd OrdererOrg
@@ -289,23 +291,81 @@
    - 生成通道配置tx及锚节点tx并将其分发给各自机器：
 
      ```bash
+     # 确保已设置环境变量FABRIC_CFG_PATH
+     export FABRIC_CFG_PATH=${PWD}/configtx
      # 生成通道配置tx
-     FABRIC_CFG_PATH=${PWD}/configtx configtxgen -profile TwoOrgsChannel -channelID mychannel -outputCreateChannelTx Org1/channel-artifacts/mychannel.tx
+     configtxgen -profile TwoOrgsChannel -channelID mychannel -outputCreateChannelTx Org1/channel-artifacts/mychannel.tx
      # 为Org1生成锚节点tx
-     FABRIC_CFG_PATH=${PWD}/configtx configtxgen -profile TwoOrgsChannel -channelID mychannel -asOrg Org1MSP -outputAnchorPeersUpdate Org1/channel-artifacts/Org1MSPanchors.tx
+     configtxgen -profile TwoOrgsChannel -channelID mychannel -asOrg Org1MSP -outputAnchorPeersUpdate Org1/channel-artifacts/Org1MSPanchors.tx
      # 分发给Org1所在机器(192.168.70.20)
      cd Org1
      scp -P 8888 -r channel-artifacts ubuntu@192.168.70.20:$PWD
      cd -
      
      # 为Org2生成锚节点tx
-     FABRIC_CFG_PATH=${PWD}/configtx configtxgen -profile TwoOrgsChannel -channelID mychannel -asOrg Org2MSP -outputAnchorPeersUpdate Org2/channel-artifacts/Org2MSPanchors.tx
+     configtxgen -profile TwoOrgsChannel -channelID mychannel -asOrg Org2MSP -outputAnchorPeersUpdate Org2/channel-artifacts/Org2MSPanchors.tx
      # 分发给Org2所在机器(192.168.70.21)
      cd Org2
      scp -P 8888 -r channel-artifacts ubuntu@192.168.70.21:$PWD
      cd -
      ```
 
+   - 创建通道并将Peer节点加入通道中
+
+     - 确保已设置下列环境变量
+
+       ```bash
+       # FABRIC_CFG_PATH
+       export FABRIC_CFG_PATH=${PWD}/configtx
+       # ORDERER_CA(此处以orderer1.example.com的tls证书为例)
+       export ORDERER_CA=${PWD}/OrdererOrg/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+       # CORE_PEER_TLS_ENABLED
+       export CORE_PEER_TLS_ENABLED=true
+       ```
+
+     - 设置节点相关环境变量
+
+       - `peer0.org1.example.com`：在192.168.70.20上执行下列命令
+
+         ```bash
+         export CORE_PEER_LOCALMSPID="Org1MSP"
+         export CORE_PEER_ADDRESS=localhost:7051
+         export CORE_PEER_MSPCONFIGPATH=${PWD}/Org1/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+         export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/Org1/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+         ```
+
+       - `peer0.org2.example.com`：在192.168.70.21上执行下列命令
+
+         ```bash
+         export CORE_PEER_LOCALMSPID="Org2MSP"
+         export CORE_PEER_ADDRESS=localhost:7051
+         export CORE_PEER_MSPCONFIGPATH=${PWD}/Org2/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+         export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/Org2/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+         ```
+
+     - 创建通道并将生成的区块发送给其他peer节点
+
+       ```bash
+       # 在192.168.70.20上执行
+       # 创建通道
+       peer channel create -o orderer1.example.com:7050 -c mychannel -f ./Org1/channel-artifacts/mychannel.tx --tls --cafile $ORDERER_CA
+       
+       # 分发给peer0.org2.example.com所在机器(192.168.70.21)
+       scp -P 8888 mychannel.block ubuntu@192.168.70.21:$PWD
+       ```
+
+     - 将节点加入通道中：分别在192.168.70.20和192.168.70.21上执行命令`peer channel join -b mychannel.block`
+
+     - 更新锚节点
+
+       ```bash
+       # 在192.168.70.20上执行
+       peer channel update -o orderer1.example.com:7050 -c mychannel -f ./Org1/channel-artifacts/Org1MSPanchors.tx --tls --cafile $ORDERER_CA
+       
+       # 在192.168.70.21上执行
+       peer channel update -o orderer2.example.com:7050 -c mychannel -f ./Org2/channel-artifacts/Org2MSPanchors.tx --tls --cafile $ORDERER_CA
+       ```
+
    - 
 
-3. 启用orderer节点：`docker-compose -f org1/docker/docker-compose-orderer.yaml up -d`
+3. 
